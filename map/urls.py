@@ -6,3 +6,5 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'get_directions', views.get_directions, name='get_directions'),
 ]
+
+urlpatterns += staticfiles_urlpatterns()
