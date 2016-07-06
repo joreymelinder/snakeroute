@@ -70,7 +70,7 @@ function initSearch(){
   $('#loc-button').click(function(){
     getLocation(function(loc){
       if(loc){
-        console.log(loc.constructor==google.maps.Geoposition);
+        //console.log(loc.constructor==google.maps.Geoposition);
         locations.push(new Location("my location",new google.maps.LatLng({lat:loc.coords.latitude,lng:loc.coords.longitude}),""));
         getDirections();
       }
@@ -156,14 +156,14 @@ function getDirections(){
 
         directionsDisplay.setDirections(response);
 
-        console.log('routed');
+        //console.log('routed');
         if(startLocation!=endLocation){
-          console.log('not loop');
+          //console.log('not loop');
           endLocation.addToRoute(null);
           endLocation.div.find('.end-button i').css('color','red');
         }
         else{
-          console.log('loop');
+          //console.log('loop');
           var endDiv = endLocation.div.clone();
           endDiv.remove('.item-directions');
           endDiv.find('.end-button i').css('color','red');

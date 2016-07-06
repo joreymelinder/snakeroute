@@ -39,7 +39,7 @@ function Location(name, location, address){
         this.setStart();
       }.bind(this));
     }
-    
+
     if(this!=endLocation){
       this.endButton.click(function(){
         this.setEnd();
@@ -82,11 +82,11 @@ function Location(name, location, address){
     this.marker.setMap(null);
     locations.splice(locations.indexOf(this),1);
     if(startLocation==this){
-      console.log('delete start');
+      //console.log('delete start');
       startLocation=null;
     }
     if(endLocation==this){
-      console.log('delete end');
+      //console.log('delete end');
       endLocation=null;
     }
     getDirections();
