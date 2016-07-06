@@ -6,10 +6,6 @@ html, body {
 #map {
   height: 100%;
 }
-.controls {
-  outline: none;
-  border: 1px solid transparent;
-}
 
 #search-div{
   background-color: #4285f4;

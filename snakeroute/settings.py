@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'kvs^34()xl(!tx(f)wwh1wvxt6m5w%yrh&)oa$&-hhzbs@vf9='
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.snakeroute.com']
 
 
 # Application definition
@@ -110,6 +110,18 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
+
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+SECURE_BROWSER_XSS_FILTER = True
+
+SESSION_COOKIE_SECURE = True
+
+CSRF_COOKIE_SECURE = True
+
+CSRF_COOKIE_HTTPONLY = True
+
+X_FRAME_OPTIONS = 'DENY'
 
 TIME_ZONE = 'UTC'
 
