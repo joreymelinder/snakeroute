@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'kvs^34()xl(!tx(f)wwh1wvxt6m5w%yrh&)oa$&-hhzbs@vf9='
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['.snakeroute.com']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -37,12 +37,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.gis',
+    'csvimport.app.CSVImportConf',
+    #'corsheaders',
     'map',
 ]
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    #'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -75,6 +79,7 @@ WSGI_APPLICATION = 'snakeroute.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -83,6 +88,15 @@ DATABASES = {
         'PASSWORD': 'B07F4F60575AC01B9BB6A8B6E0DB13321AD3D60488695877528FA9BAB583FA2D',
         'HOST': 'localhost',
         'PORT': '',
+    }
+}
+"""
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'roads',
+        'USER': 'jorey'
     }
 }
 
@@ -112,12 +126,16 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'en-us'
 
 #security
+"""
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_BROWSER_XSS_FILTER = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = True
 X_FRAME_OPTIONS = 'DENY'
+"""
+
+#CORS_ORIGIN_ALLOW_ALL = True
 
 TIME_ZONE = 'UTC'
 

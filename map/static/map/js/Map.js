@@ -1,6 +1,8 @@
 var map, geocoder, searchBox, directionsService, directionsDisplay;
 
 var locations=[];
+var searches=[];
+var routes=[];
 var points = [];
 var pointLocs = [];
 
@@ -21,6 +23,13 @@ function init() {
       style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
       position: google.maps.ControlPosition.TOP_RIGHT
     },
+  });
+
+  map.data.setStyle({
+    strokeWeight: 1,
+    fillOpacity: 0.05,
+    strokeWeight: 1,
+    visible: true,
   });
 
   initSearch();
@@ -59,6 +68,8 @@ function initSearch(){
   searchBox = new google.maps.places.SearchBox(document.getElementById('search-bar'));
   map.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById('search-div'));
   map.controls[google.maps.ControlPosition.LEFT_TOP].push(document.getElementById('list-div'));
+
+/*
   map.controls[google.maps.ControlPosition.RIGHT_TOP].push(document.getElementById('opt-button'));
   map.controls[google.maps.ControlPosition.RIGHT_TOP].push(document.getElementById('loc-button'));
 
@@ -79,6 +90,7 @@ function initSearch(){
       }
     });
   });
+*/
 
   // Bias the SearchBox results towards current map's viewport.
   map.addListener('bounds_changed', function() {
@@ -86,8 +98,10 @@ function initSearch(){
   });
 
   searchBox.addListener('places_changed', function() {
-    search();
+    console.log('places changed');
+    search2();
   });
+
 }
 
 function initDirections(){
@@ -96,8 +110,6 @@ function initDirections(){
 
   directionsService = new google.maps.DirectionsService();
 }
-
-
 
 function search(){
   var places=searchBox.getPlaces()
@@ -110,8 +122,19 @@ function search(){
       locations[0].delete();
     }
   };
-  getDirections();
+  //getDirections();
 }
+
+function search2(){
+  $('#search-tabs').show();
+  var search = new Search("search");
+  searchBox.getPlaces().forEach(function(place){
+    search.add(new Location(place.name,place.geometry.location,place.formatted_address));
+  });
+  searches.push(search);
+  search.show();
+}
+
 
 function getDirections(){
   if(locations.length>1){
@@ -177,6 +200,7 @@ function getDirections(){
     });
   }
 }
+
 
 function getLocation(callback){
   if (navigator.geolocation) {
