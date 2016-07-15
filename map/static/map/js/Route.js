@@ -67,13 +67,14 @@ function Route(name){
   }
 
   this.show = function(){
-    //$('#route-content').empty();
+    var bounds=new google.maps.LatLngBounds();
+    $('#route-content').empty();
     $('#route-content').append(this.div);
     this.bindEvents();
-    /*
     this.locations.forEach(function(location){
-      location.bindEvents();
-    });*/
+      bounds.extend(location.location);
+    });
+    map.fitBounds(bounds);
   }
 
 

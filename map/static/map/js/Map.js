@@ -1,10 +1,10 @@
 var map, geocoder, searchBox, directionsService, directionsDisplay;
 
-var locations=[];
 var searches=[];
 var routes=[];
 var points = [];
 var pointLocs = [];
+var selected=null;
 
 var startLocation, endLocation;
 var opt=true;
@@ -18,7 +18,8 @@ function init() {
     mapTypeId: google.maps.MapTypeId.ROADMAP,
     streetViewControl: false,
     rotateControl: false,
-    mapTypeControl:true,
+    zoomControl: false,
+    mapTypeControl:false,
     mapTypeControlOptions: {
       style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
       position: google.maps.ControlPosition.TOP_RIGHT
@@ -68,6 +69,7 @@ function initSearch(){
   searchBox = new google.maps.places.SearchBox(document.getElementById('search-bar'));
   map.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById('search-div'));
   map.controls[google.maps.ControlPosition.LEFT_TOP].push(document.getElementById('list-div'));
+  map.controls[google.maps.ControlPosition.TOP_RIGHT].push(document.getElementById('details'));
 
 /*
   map.controls[google.maps.ControlPosition.RIGHT_TOP].push(document.getElementById('opt-button'));
@@ -99,7 +101,7 @@ function initSearch(){
 
   searchBox.addListener('places_changed', function() {
     console.log('places changed');
-    search2();
+    search();
   });
 
 }
@@ -111,96 +113,21 @@ function initDirections(){
   directionsService = new google.maps.DirectionsService();
 }
 
+
 function search(){
-  var places=searchBox.getPlaces()
-  for(i=0;i<9&&i<places.length;i++){
-    var place = places[i];
-    var loc = new Location(place.name,place.geometry.location,place.formatted_address);
-    locations.push(loc);
-
-    if(locations.length>9){
-      locations[0].delete();
-    }
-  };
-  //getDirections();
-}
-
-function search2(){
   $('#search-tabs').show();
   var search = new Search("search");
   searchBox.getPlaces().forEach(function(place){
-    search.add(new Location(place.name,place.geometry.location,place.formatted_address));
+    console.log(place);
+    var image=null;
+    if(place.photos!=null){
+      image=place.photos[0];
+    }
+    search.add(new Location(place.name,place.geometry.location,place.formatted_address,image));
   });
   searches.push(search);
   search.show();
 }
-
-
-function getDirections(){
-  if(locations.length>1){
-    $('#list-div').empty();
-    if(!startLocation){
-      startLocation=locations[0];
-    }
-    if(!endLocation){
-      endLocation=startLocation;
-    }
-
-    points = [];
-    pointLocs = [];
-
-    locations.forEach(function(loc){
-      if(loc!=startLocation&&loc!=endLocation&&points.length<8){
-        points.push({location: loc.location, stopover:true});
-        pointLocs.push(loc);
-      }
-    });
-
-    var request = {
-      origin:startLocation.location,
-      destination:endLocation.location,
-      optimizeWaypoints:opt,
-      waypoints: points,
-      travelMode: google.maps.TravelMode.DRIVING
-    };
-
-    directionsService.route(request, function(response, status) {
-      if (status == google.maps.DirectionsStatus.OK) {
-        var route = response.routes[0];
-        var legs = route.legs;
-        var distance=0;
-        startLocation.addToRoute(legs[0]);
-        startLocation.div.find('.start-button i').css('color','green');
-        distance+=legs[0].distance.value;
-        for(i=1;i<legs.length;i++){
-          pointLocs[route.waypoint_order[i-1]].addToRoute(legs[i]);
-          distance+=legs[i].distance.value;
-        }
-
-        directionsDisplay.setDirections(response);
-
-        //console.log('routed');
-        if(startLocation!=endLocation){
-          //console.log('not loop');
-          endLocation.addToRoute(null);
-          endLocation.div.find('.end-button i').css('color','red');
-        }
-        else{
-          //console.log('loop');
-          var endDiv = endLocation.div.clone();
-          endDiv.remove('.item-directions');
-          endDiv.find('.end-button i').css('color','red');
-          startLocation.div.find('.end-button i').css('color','red');
-          $('#list-div').append(endDiv);
-        }
-        distDiv = $('<div class=\'totals\'>'+'Total distance: <b>'+(Math.round(distance*0.000621371*100)/100)+' miles.</b>'+'</div>');
-
-        $('#list-div').append(distDiv);
-      }
-    });
-  }
-}
-
 
 function getLocation(callback){
   if (navigator.geolocation) {

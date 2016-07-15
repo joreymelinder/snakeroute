@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
+import getpass
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -23,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'kvs^34()xl(!tx(f)wwh1wvxt6m5w%yrh&)oa$&-hhzbs@vf9='
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = getpass.getuser()=='jorey'
 
 ALLOWED_HOSTS = ['snakeroute.com','.snakeroute.com','localhost','127.0.0.1']
 
